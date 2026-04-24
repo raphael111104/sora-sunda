@@ -11,6 +11,7 @@ import {
 const MAX_HISTORY_MESSAGES = 10
 const MAX_RETRY_COUNT = 1
 const MAX_TRANSIENT_RETRIES = 2
+const MAX_CONTINUATION_COUNT = 2
 const DEFAULT_MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite']
 
 const siteKnowledge = [
@@ -115,6 +116,7 @@ function buildUserPrompt(message) {
 - Berikan isi jawaban terlebih dahulu, bukan pembuka basa-basi.
 - Jika relevan, gunakan bullet list singkat agar mudah dibaca.
 - Jika ada ketidakpastian atau variasi adat, jelaskan secara jujur tanpa mengarang.
+- Pastikan jawaban diakhiri dengan kalimat yang tuntas.
 
 Pertanyaan pengguna:
 ${message}`
@@ -150,6 +152,14 @@ function extractResponseText(payload) {
     .filter(Boolean)
     .join('\n')
     .trim()
+}
+
+function extractFinishReason(payload) {
+  return normalizeText(payload?.candidates?.[0]?.finishReason)
+}
+
+function wasStoppedByTokenLimit(payload) {
+  return extractFinishReason(payload) === 'MAX_TOKENS'
 }
 
 function isWeakAnswer(answer) {
@@ -233,7 +243,7 @@ Revisi jawaban:
       generationConfig: {
         temperature: retry ? 0.45 : 0.6,
         topP: 0.85,
-        maxOutputTokens: retry ? 750 : 650,
+        maxOutputTokens: retry ? 1400 : 1200,
         responseMimeType: 'text/plain',
       },
     }),
@@ -271,7 +281,122 @@ Revisi jawaban:
 
   return {
     answer: extractResponseText(payload),
+    finishReason: extractFinishReason(payload),
     payload,
+  }
+}
+
+async function requestGeminiContinuation({
+  apiKey,
+  history,
+  message,
+  model,
+  partialAnswer,
+  transientAttempt = 0,
+}) {
+  const response = await fetch(buildGeminiApiUrl(model), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': apiKey,
+    },
+    body: JSON.stringify({
+      system_instruction: {
+        parts: [{ text: systemInstruction }],
+      },
+      contents: [
+        ...normalizeHistory(history),
+        {
+          role: 'user',
+          parts: [{ text: buildUserPrompt(message) }],
+        },
+        {
+          role: 'model',
+          parts: [{ text: partialAnswer }],
+        },
+        {
+          role: 'user',
+          parts: [
+            {
+              text:
+                'Lanjutkan jawaban sebelumnya tepat dari bagian yang terpotong. Jangan mengulang bagian awal. Akhiri dengan kalimat yang tuntas.',
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.45,
+        topP: 0.85,
+        maxOutputTokens: 900,
+        responseMimeType: 'text/plain',
+      },
+    }),
+  })
+
+  const payload = await response.json()
+
+  if (!response.ok) {
+    const errorMessage =
+      payload?.error?.message || 'Permintaan lanjutan ke Gemini gagal diproses.'
+
+    if (
+      transientAttempt < MAX_TRANSIENT_RETRIES &&
+      isTransientGeminiFailure({
+        status: response.status,
+        message: errorMessage,
+      })
+    ) {
+      await sleep(350 * (transientAttempt + 1))
+
+      return requestGeminiContinuation({
+        apiKey,
+        history,
+        message,
+        model,
+        partialAnswer,
+        transientAttempt: transientAttempt + 1,
+      })
+    }
+
+    const error = new Error(errorMessage)
+    error.status = response.status
+    throw error
+  }
+
+  return {
+    answer: extractResponseText(payload),
+    finishReason: extractFinishReason(payload),
+    payload,
+  }
+}
+
+async function completeTokenLimitedAnswer({ apiKey, history, message, model, answer, payload }) {
+  let completeAnswer = answer
+  let latestPayload = payload
+  let continuationCount = 0
+
+  while (wasStoppedByTokenLimit(latestPayload) && continuationCount < MAX_CONTINUATION_COUNT) {
+    const continuation = await requestGeminiContinuation({
+      apiKey,
+      history,
+      message,
+      model,
+      partialAnswer: completeAnswer,
+    })
+
+    if (!continuation.answer) {
+      break
+    }
+
+    completeAnswer = `${completeAnswer.trim()}\n\n${continuation.answer.trim()}`.trim()
+    latestPayload = continuation.payload
+    continuationCount += 1
+  }
+
+  return {
+    answer: completeAnswer,
+    finishReason: extractFinishReason(latestPayload),
+    payload: latestPayload,
   }
 }
 
@@ -312,6 +437,20 @@ export async function generateSundaChatReply({
 
         answer = result.answer
         payload = result.payload
+
+        if (wasStoppedByTokenLimit(payload)) {
+          const completedResult = await completeTokenLimitedAnswer({
+            apiKey,
+            history,
+            message: normalizedMessage,
+            model,
+            answer,
+            payload,
+          })
+
+          answer = completedResult.answer
+          payload = completedResult.payload
+        }
 
         if (!isWeakAnswer(answer)) {
           return answer
