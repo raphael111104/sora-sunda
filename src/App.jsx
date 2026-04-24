@@ -8,6 +8,7 @@ import { navigationItems, sectionDividers } from './data/siteContent'
 import { Navbar } from './components/Navbar'
 import { ScrollProgress } from './components/ScrollProgress'
 import { BackToTop } from './components/BackToTop'
+import { SundaAiChat } from './components/SundaAiChat'
 import { Hero } from './components/sections/Hero'
 import { StoryIntro } from './components/sections/StoryIntro'
 import { RumahAdat } from './components/sections/RumahAdat'
@@ -65,6 +66,7 @@ function App() {
 
       <ScrollProgress />
       <BackToTop reducedMotion={reducedMotion} />
+      <SundaAiChat reducedMotion={reducedMotion} />
 
       <main className="relative z-10">
         <Hero assets={assets} onNavigate={handleNavigate} reducedMotion={reducedMotion} />

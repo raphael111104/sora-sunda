@@ -15,7 +15,7 @@ export function BackToTop({ reducedMotion }) {
       {visible && (
         <MotionButton
           animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-4 right-4 z-30 rounded-full border border-[rgba(206,180,123,0.18)] bg-[rgba(8,10,8,0.76)] px-4 py-3 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--color-cream)] shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-lg"
+          className="fixed bottom-24 right-4 z-30 rounded-full border border-[rgba(206,180,123,0.18)] bg-[rgba(8,10,8,0.76)] px-4 py-3 text-[0.64rem] uppercase tracking-[0.28em] text-[var(--color-cream)] shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-lg sm:bottom-28 sm:right-5"
           exit={{ opacity: 0, y: 16 }}
           initial={reducedMotion ? false : { opacity: 0, y: 16 }}
           onClick={() =>

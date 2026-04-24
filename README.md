@@ -1,16 +1,33 @@
-# React + Vite
+# Adat Sunda
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Website editorial interaktif bertema adat Sunda yang dibangun dengan React, Vite, Tailwind, Motion, GSAP, dan Lenis.
 
-Currently, two official plugins are available:
+## Menjalankan project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Install dependency:
+   `npm install`
+2. Siapkan environment:
+   salin `.env.example` menjadi `.env`
+3. Isi API key Gemini:
+   `GEMINI_API_KEY=your_google_ai_studio_api_key`
+4. Jalankan development server:
+   `npm run dev`
 
-## React Compiler
+Opsional:
+`GEMINI_MODELS=gemini-2.5-flash,gemini-2.5-flash-lite`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Fitur AI Gemini
 
-## Expanding the ESLint configuration
+- Widget AI muncul sebagai tombol melayang di sudut kanan bawah.
+- Chat diarahkan khusus untuk pertanyaan seputar adat dan budaya Sunda.
+- Request ke Gemini dikirim lewat endpoint server-side `/api/chat` agar API key tidak ikut tampil di browser.
+- Secara default integrasi memakai endpoint `generateContent` dengan fallback model `gemini-2.5-flash` lalu `gemini-2.5-flash-lite`.
+- Backend akan retry singkat untuk error overload sementara sebelum pindah ke model cadangan.
+- Untuk deployment di Vercel, tambahkan `GEMINI_API_KEY` dan opsional `GEMINI_MODELS` pada project environment variables.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Scripts
+
+- `npm run dev` menjalankan website dalam mode development.
+- `npm run build` membuat build production.
+- `npm run lint` mengecek kualitas kode.
+- `npm run optimize:media` mengoptimalkan aset media lewat script internal.
