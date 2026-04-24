@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 
+const AMBIENT_VOLUME = 0.28
+const LAYER_GAINS = {
+  low: 0.07,
+  high: 0.046,
+  shimmer: 0.032,
+  wind: 0.018,
+  tremolo: 0.022,
+}
+
 function createNoiseBuffer(audioContext) {
   const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 2, audioContext.sampleRate)
   const channel = buffer.getChannelData(0)
@@ -41,12 +50,12 @@ export function useAmbientAudio() {
     const noiseFilter = context.createBiquadFilter()
 
     master.gain.value = 0
-    lowGain.gain.value = 0.04
-    highGain.gain.value = 0.026
-    shimmerGain.gain.value = 0.016
-    windGain.gain.value = 0.008
+    lowGain.gain.value = LAYER_GAINS.low
+    highGain.gain.value = LAYER_GAINS.high
+    shimmerGain.gain.value = LAYER_GAINS.shimmer
+    windGain.gain.value = LAYER_GAINS.wind
     tremolo.frequency.value = 0.09
-    tremoloGain.gain.value = 0.012
+    tremoloGain.gain.value = LAYER_GAINS.tremolo
     lowTone.type = 'sine'
     highTone.type = 'triangle'
     shimmerTone.type = 'sine'
@@ -121,7 +130,7 @@ export function useAmbientAudio() {
     const now = audio.context.currentTime
     audio.master.gain.cancelScheduledValues(now)
     audio.master.gain.setValueAtTime(audio.master.gain.value, now)
-    audio.master.gain.linearRampToValueAtTime(0.1, now + 1.1)
+    audio.master.gain.linearRampToValueAtTime(AMBIENT_VOLUME, now + 1.1)
   }
 
   const toggle = async () => {
