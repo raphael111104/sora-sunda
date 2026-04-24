@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const AMBIENT_VOLUME = 0.28
+const AMBIENT_VOLUME = 1
 const LAYER_GAINS = {
   low: 0.07,
   high: 0.046,
