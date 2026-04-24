@@ -211,18 +211,18 @@ export function SundaAiChat({ reducedMotion }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               aria-label="Asisten AI Adat Sunda"
               aria-modal="true"
-              className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] top-[max(5rem,env(safe-area-inset-top,0px))] z-50 grid h-auto grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[1.4rem] border border-[rgba(206,180,123,0.22)] bg-[linear-gradient(180deg,rgba(10,14,10,0.988),rgba(7,10,8,0.97))] shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-xl md:inset-x-auto md:bottom-6 md:right-6 md:top-14 md:h-auto md:w-[min(52rem,calc(100vw-3rem))] md:max-w-none md:rounded-[1.5rem] md:shadow-[0_30px_100px_rgba(0,0,0,0.45)]"
+              className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] top-[calc(env(safe-area-inset-top,0px)+0.75rem)] z-50 grid h-auto grid-rows-[auto_auto_minmax(0,1fr)_auto] overflow-hidden rounded-[1.4rem] border border-[rgba(206,180,123,0.22)] bg-[linear-gradient(180deg,rgba(10,14,10,0.988),rgba(7,10,8,0.97))] shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-xl md:inset-x-auto md:bottom-6 md:right-6 md:top-14 md:h-auto md:w-[min(52rem,calc(100vw-3rem))] md:max-w-none md:grid-rows-[auto_minmax(0,1fr)_auto] md:rounded-[1.5rem] md:shadow-[0_30px_100px_rgba(0,0,0,0.45)]"
               data-lenis-prevent="true"
               exit={{ opacity: 0, y: 20, scale: 0.96 }}
               initial={reducedMotion ? false : { opacity: 0, y: 20, scale: 0.96 }}
               role="dialog"
               transition={{ duration: reducedMotion ? 0 : 0.28, ease: 'easeOut' }}
             >
-              <div className="px-4 pt-1.5 md:hidden">
+              <div className="relative z-20 shrink-0 bg-[rgba(8,11,8,0.98)] px-4 pt-1.5 md:hidden">
                 <div className="mx-auto h-1 w-12 rounded-full bg-[rgba(246,238,224,0.16)]" />
               </div>
 
-              <div className="border-b border-[rgba(206,180,123,0.14)] px-2.5 py-1.5 md:bg-[linear-gradient(135deg,rgba(201,176,125,0.16),rgba(36,50,38,0.36))] md:px-4.5 md:py-2.5">
+              <div className="relative z-20 shrink-0 border-b border-[rgba(206,180,123,0.2)] bg-[linear-gradient(180deg,rgba(13,17,13,0.995),rgba(9,12,9,0.985))] px-2.5 py-1.5 shadow-[0_12px_28px_rgba(0,0,0,0.28)] md:bg-[linear-gradient(135deg,rgba(201,176,125,0.16),rgba(36,50,38,0.36))] md:px-4.5 md:py-2.5 md:shadow-none">
                 <div className="rounded-[1rem] border border-[rgba(206,180,123,0.14)] bg-[linear-gradient(135deg,rgba(201,176,125,0.14),rgba(36,50,38,0.26))] px-3 py-2 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0">
                   <div className="flex items-start justify-between gap-2 md:items-center md:gap-3.5">
                     <div className="flex min-w-0 flex-1 items-start gap-2.5 md:items-center">
@@ -241,7 +241,7 @@ export function SundaAiChat({ reducedMotion }) {
 
                     <button
                       aria-label="Tutup panel AI"
-                      className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(5,7,5,0.28)] text-[var(--color-cream)] transition-colors duration-300 hover:bg-[rgba(255,255,255,0.08)] md:h-8.5 md:w-8.5"
+                      className="relative z-30 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(5,7,5,0.72)] text-[var(--color-cream)] transition-colors duration-300 hover:bg-[rgba(255,255,255,0.08)] md:h-8.5 md:w-8.5"
                       onClick={() => setIsOpen(false)}
                       type="button"
                     >
@@ -263,8 +263,8 @@ export function SundaAiChat({ reducedMotion }) {
                 </div>
               </div>
 
-              <div className="min-h-0 bg-[linear-gradient(180deg,rgba(8,11,8,0.34),rgba(7,10,8,0.08))] md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
-                <aside className="hidden border-r border-[rgba(206,180,123,0.1)] bg-[rgba(255,255,255,0.02)] p-4 md:block">
+              <div className="relative z-0 min-h-0 overflow-hidden bg-[linear-gradient(180deg,rgba(8,11,8,0.34),rgba(7,10,8,0.08))] md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
+                <aside className="hidden min-h-0 border-r border-[rgba(206,180,123,0.1)] bg-[rgba(255,255,255,0.02)] p-4 md:block">
                   <p className="text-[0.58rem] uppercase tracking-[0.24em] text-[rgba(228,219,201,0.46)]">
                     Topik Cepat
                   </p>
@@ -292,9 +292,9 @@ export function SundaAiChat({ reducedMotion }) {
                   </div>
                 </aside>
 
-                <div className="min-h-0 px-3 py-3 md:px-5 md:py-5">
+                <div className="min-h-0 overflow-hidden px-3 py-3 md:px-5 md:py-5">
                   <div
-                    className="h-full overflow-y-auto overscroll-contain pr-1 [touch-action:pan-y] md:pr-2"
+                    className="h-full min-h-0 overflow-y-auto overscroll-contain pr-1 [touch-action:pan-y] md:pr-2"
                     data-lenis-prevent="true"
                     ref={bodyRef}
                   >
@@ -348,7 +348,7 @@ export function SundaAiChat({ reducedMotion }) {
                 </div>
               </div>
 
-              <div className="border-t border-[rgba(206,180,123,0.12)] bg-[rgba(6,8,6,0.92)] px-3 py-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] md:px-5 md:py-4 md:pb-4">
+              <div className="relative z-20 shrink-0 border-t border-[rgba(206,180,123,0.12)] bg-[rgba(6,8,6,0.96)] px-3 py-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] shadow-[0_-12px_28px_rgba(0,0,0,0.24)] md:px-5 md:py-4 md:pb-4 md:shadow-none">
                 <div
                   className="-mx-1 mb-2.5 flex gap-2 overflow-x-auto px-1 pb-1 overscroll-contain [touch-action:pan-x] md:hidden"
                   data-lenis-prevent="true"
