@@ -91,7 +91,7 @@ export function SundaAiChat({ reducedMotion }) {
       top: bodyRef.current.scrollHeight,
       behavior: reducedMotion ? 'auto' : 'smooth',
     })
-  }, [messages, isOpen, reducedMotion])
+  }, [messages, isLoading, isOpen, reducedMotion])
 
   useEffect(() => {
     if (!isOpen) {
@@ -211,67 +211,73 @@ export function SundaAiChat({ reducedMotion }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               aria-label="Asisten AI Adat Sunda"
               aria-modal="true"
-              className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] top-[calc(env(safe-area-inset-top,0px)+0.75rem)] z-50 grid h-auto grid-rows-[auto_auto_minmax(0,1fr)_auto] overflow-hidden rounded-[1.4rem] border border-[rgba(206,180,123,0.22)] bg-[linear-gradient(180deg,rgba(10,14,10,0.988),rgba(7,10,8,0.97))] shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-xl md:inset-x-auto md:bottom-6 md:right-6 md:top-14 md:h-auto md:w-[min(52rem,calc(100vw-3rem))] md:max-w-none md:grid-rows-[auto_minmax(0,1fr)_auto] md:rounded-[1.5rem] md:shadow-[0_30px_100px_rgba(0,0,0,0.45)]"
+              aria-busy={isLoading}
+              className="fixed inset-0 z-50 flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden border border-[rgba(206,180,123,0.18)] bg-[linear-gradient(180deg,rgba(12,16,12,0.995),rgba(5,8,6,0.99))] shadow-[0_18px_60px_rgba(0,0,0,0.42)] backdrop-blur-xl md:inset-x-auto md:bottom-6 md:left-auto md:right-6 md:top-6 md:h-auto md:max-h-[calc(100dvh-3rem)] md:w-[min(54rem,calc(100vw-3rem))] md:rounded-[1.5rem] md:shadow-[0_30px_100px_rgba(0,0,0,0.45)]"
               data-lenis-prevent="true"
+              data-lenis-prevent-touch="true"
+              data-lenis-prevent-wheel="true"
               exit={{ opacity: 0, y: 20, scale: 0.96 }}
               initial={reducedMotion ? false : { opacity: 0, y: 20, scale: 0.96 }}
               role="dialog"
               transition={{ duration: reducedMotion ? 0 : 0.28, ease: 'easeOut' }}
             >
-              <div className="relative z-20 shrink-0 bg-[rgba(8,11,8,0.98)] px-4 pt-1.5 md:hidden">
-                <div className="mx-auto h-1 w-12 rounded-full bg-[rgba(246,238,224,0.16)]" />
-              </div>
-
-              <div className="relative z-20 shrink-0 border-b border-[rgba(206,180,123,0.2)] bg-[linear-gradient(180deg,rgba(13,17,13,0.995),rgba(9,12,9,0.985))] px-2.5 py-1.5 shadow-[0_12px_28px_rgba(0,0,0,0.28)] md:bg-[linear-gradient(135deg,rgba(201,176,125,0.16),rgba(36,50,38,0.36))] md:px-4.5 md:py-2.5 md:shadow-none">
-                <div className="rounded-[1rem] border border-[rgba(206,180,123,0.14)] bg-[linear-gradient(135deg,rgba(201,176,125,0.14),rgba(36,50,38,0.26))] px-3 py-2 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0">
-                  <div className="flex items-start justify-between gap-2 md:items-center md:gap-3.5">
-                    <div className="flex min-w-0 flex-1 items-start gap-2.5 md:items-center">
-                    <div className="mt-0.5 hidden h-9 w-9 shrink-0 items-center justify-center rounded-[0.85rem] border border-[rgba(206,180,123,0.18)] bg-[rgba(206,180,123,0.08)] text-[var(--color-accent)] md:flex">
+              <header className="relative z-30 shrink-0 border-b border-[rgba(206,180,123,0.18)] bg-[linear-gradient(180deg,rgba(15,20,15,0.995),rgba(9,12,9,0.985))] px-4 pb-3 pt-[calc(env(safe-area-inset-top,0px)+0.85rem)] shadow-[0_14px_34px_rgba(0,0,0,0.28)] md:px-5 md:py-4 md:shadow-none">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.95rem] border border-[rgba(206,180,123,0.2)] bg-[rgba(206,180,123,0.1)] text-[var(--color-accent)]">
                       <span className="text-[0.95rem] leading-none">*</span>
                     </div>
-                    <div className="min-w-0 max-w-[13.5rem] md:max-w-none">
-                      <h2 className="font-display text-[1.08rem] leading-none text-[var(--color-cream)] md:mt-1 md:text-[1.45rem]">
+                    <div className="min-w-0">
+                      <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                        <h2 className="font-display text-[1.35rem] leading-none text-[var(--color-cream)] md:text-[1.55rem]">
                         Tanya budaya Sunda
-                      </h2>
-                      <p className="mt-0.5 max-w-[34rem] text-[0.68rem] leading-4.5 text-[rgba(246,238,224,0.72)] md:mt-1 md:text-[0.78rem] md:leading-[1.35rem]">
+                        </h2>
+                        <span className="rounded-full border border-[rgba(206,180,123,0.2)] bg-[rgba(206,180,123,0.08)] px-2.5 py-1 text-[0.56rem] uppercase tracking-[0.18em] text-[rgba(246,238,224,0.6)]">
+                          AI
+                        </span>
+                      </div>
+                      <p className="mt-1 max-w-[34rem] text-[0.72rem] leading-5 text-[rgba(246,238,224,0.72)] md:text-[0.8rem] md:leading-[1.35rem]">
                         Bahas adat, tata krama, rumah adat, angklung, dan nilai hidup masyarakat Sunda.
                       </p>
                     </div>
-                    </div>
-
-                    <button
-                      aria-label="Tutup panel AI"
-                      className="relative z-30 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(5,7,5,0.72)] text-[var(--color-cream)] transition-colors duration-300 hover:bg-[rgba(255,255,255,0.08)] md:h-8.5 md:w-8.5"
-                      onClick={() => setIsOpen(false)}
-                      type="button"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        className="h-2.25 w-2.25 md:h-3 md:w-3"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M6 6l12 12M18 6L6 18"
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeWidth="1.8"
-                        />
-                      </svg>
-                    </button>
                   </div>
-                </div>
-              </div>
 
-              <div className="relative z-0 min-h-0 overflow-hidden bg-[linear-gradient(180deg,rgba(8,11,8,0.34),rgba(7,10,8,0.08))] md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
-                <aside className="hidden min-h-0 border-r border-[rgba(206,180,123,0.1)] bg-[rgba(255,255,255,0.02)] p-4 md:block">
+                  <button
+                    aria-label="Tutup panel AI"
+                    className="relative z-40 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(5,7,5,0.72)] text-[var(--color-cream)] transition-colors duration-300 hover:bg-[rgba(255,255,255,0.08)] focus-visible:ring-2 focus-visible:ring-[rgba(206,180,123,0.56)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#080b08] md:h-10 md:w-10"
+                    onClick={() => setIsOpen(false)}
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M6 6l12 12M18 6L6 18"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeWidth="1.9"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </header>
+
+              <div className="relative z-0 flex min-h-0 flex-1 overflow-hidden bg-[linear-gradient(180deg,rgba(8,11,8,0.34),rgba(7,10,8,0.08))] md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
+                <aside
+                  className="hidden min-h-0 overflow-y-auto border-r border-[rgba(206,180,123,0.1)] bg-[rgba(255,255,255,0.02)] p-4 md:block"
+                  data-lenis-prevent="true"
+                >
                   <p className="text-[0.58rem] uppercase tracking-[0.24em] text-[rgba(228,219,201,0.46)]">
                     Topik Cepat
                   </p>
                   <div className="mt-3 flex flex-col gap-2">
                     {suggestionPrompts.map((prompt) => (
                       <button
-                        className="rounded-[0.95rem] border border-[rgba(206,180,123,0.13)] bg-[rgba(255,255,255,0.035)] px-3 py-3 text-left text-[0.75rem] leading-5 text-[rgba(228,219,201,0.76)] transition-colors duration-300 hover:border-[rgba(206,180,123,0.28)] hover:text-[var(--color-cream)]"
+                        className="rounded-[0.95rem] border border-[rgba(206,180,123,0.13)] bg-[rgba(255,255,255,0.035)] px-3 py-3 text-left text-[0.75rem] leading-5 text-[rgba(228,219,201,0.76)] transition-colors duration-300 hover:border-[rgba(206,180,123,0.28)] hover:text-[var(--color-cream)] disabled:cursor-not-allowed disabled:opacity-50"
+                        disabled={isLoading}
                         key={prompt}
                         onClick={() => sendMessage(prompt)}
                         type="button"
@@ -292,25 +298,27 @@ export function SundaAiChat({ reducedMotion }) {
                   </div>
                 </aside>
 
-                <div className="min-h-0 overflow-hidden px-3 py-3 md:px-5 md:py-5">
+                <section className="flex min-w-0 flex-1 flex-col overflow-hidden">
                   <div
-                    className="h-full min-h-0 overflow-y-auto overscroll-contain pr-1 [touch-action:pan-y] md:pr-2"
+                    className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-4 [-webkit-overflow-scrolling:touch] [touch-action:pan-y] md:px-5 md:py-5"
                     data-lenis-prevent="true"
+                    data-lenis-prevent-touch="true"
+                    data-lenis-prevent-wheel="true"
                     ref={bodyRef}
                   >
-                    <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col gap-3 md:gap-4">
+                    <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-end gap-3 md:gap-4">
                       {messages.map((message) => (
                         <div
-                          className={`flex gap-2 ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
+                          className={`flex items-start gap-2 ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
                           key={message.id}
                         >
                           {message.role === 'assistant' && (
-                            <span className="mt-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(206,180,123,0.16)] bg-[rgba(206,180,123,0.07)] text-[0.7rem] text-[var(--color-accent)] md:inline-flex">
+                            <span className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[rgba(206,180,123,0.16)] bg-[rgba(206,180,123,0.07)] text-[0.62rem] text-[var(--color-accent)] md:h-8 md:w-8 md:text-[0.7rem]">
                               AI
                             </span>
                           )}
                           <div
-                            className={`max-w-[96%] rounded-[1.15rem] px-3.5 py-3 text-[0.84rem] leading-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] sm:max-w-[88%] md:max-w-[82%] md:rounded-[1.25rem] md:px-5 md:py-4 md:text-[0.96rem] md:leading-6 ${
+                            className={`max-w-[min(100%,34rem)] rounded-[1.15rem] px-3.5 py-3 text-[0.84rem] leading-5 shadow-[0_16px_40px_rgba(0,0,0,0.18)] sm:max-w-[88%] md:max-w-[82%] md:rounded-[1.25rem] md:px-5 md:py-4 md:text-[0.96rem] md:leading-6 ${
                               message.role === 'assistant'
                                 ? 'border border-[rgba(206,180,123,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))] text-[rgba(244,236,223,0.94)]'
                                 : 'bg-[linear-gradient(135deg,rgba(201,176,125,0.95),rgba(160,128,79,0.95))] text-[#1f1408]'
@@ -328,12 +336,17 @@ export function SundaAiChat({ reducedMotion }) {
                       ))}
 
                       {isLoading && (
-                        <div className="flex justify-start gap-2">
-                          <span className="mt-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(206,180,123,0.16)] bg-[rgba(206,180,123,0.07)] text-[0.7rem] text-[var(--color-accent)] md:inline-flex">
+                        <div className="flex items-start justify-start gap-2">
+                          <span className="mt-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[rgba(206,180,123,0.16)] bg-[rgba(206,180,123,0.07)] text-[0.62rem] text-[var(--color-accent)] md:h-8 md:w-8 md:text-[0.7rem]">
                             AI
                           </span>
-                          <div className="rounded-[1.15rem] border border-[rgba(206,180,123,0.14)] bg-[rgba(255,255,255,0.04)] px-3.5 py-3 text-[0.84rem] text-[rgba(244,236,223,0.72)] md:rounded-[1.25rem] md:px-5 md:py-4 md:text-[0.96rem]">
-                            AI sedang merangkai jawaban...
+                          <div className="flex items-center gap-2 rounded-[1.15rem] border border-[rgba(206,180,123,0.14)] bg-[rgba(255,255,255,0.04)] px-3.5 py-3 text-[0.84rem] text-[rgba(244,236,223,0.72)] md:rounded-[1.25rem] md:px-5 md:py-4 md:text-[0.96rem]">
+                            <span>AI sedang merangkai jawaban</span>
+                            <span className="flex gap-1" aria-hidden="true">
+                              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[rgba(206,180,123,0.7)]" />
+                              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[rgba(206,180,123,0.55)] [animation-delay:120ms]" />
+                              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[rgba(206,180,123,0.4)] [animation-delay:240ms]" />
+                            </span>
                           </div>
                         </div>
                       )}
@@ -345,17 +358,19 @@ export function SundaAiChat({ reducedMotion }) {
                       )}
                     </div>
                   </div>
-                </div>
+                </section>
               </div>
 
-              <div className="relative z-20 shrink-0 border-t border-[rgba(206,180,123,0.12)] bg-[rgba(6,8,6,0.96)] px-3 py-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] shadow-[0_-12px_28px_rgba(0,0,0,0.24)] md:px-5 md:py-4 md:pb-4 md:shadow-none">
+              <footer className="relative z-30 shrink-0 border-t border-[rgba(206,180,123,0.14)] bg-[linear-gradient(180deg,rgba(7,10,7,0.96),rgba(4,6,4,0.995))] px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.8rem)] pt-3 shadow-[0_-12px_30px_rgba(0,0,0,0.28)] md:px-5 md:pb-4 md:pt-4 md:shadow-none">
                 <div
-                  className="-mx-1 mb-2.5 flex gap-2 overflow-x-auto px-1 pb-1 overscroll-contain [touch-action:pan-x] md:hidden"
+                  className="-mx-1 mb-2.5 flex gap-2 overflow-x-auto px-1 pb-0.5 overscroll-contain [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [touch-action:pan-x] [&::-webkit-scrollbar]:hidden md:hidden"
                   data-lenis-prevent="true"
+                  data-lenis-prevent-touch="true"
                 >
                   {suggestionPrompts.map((prompt) => (
                     <button
-                      className="shrink-0 rounded-full border border-[rgba(206,180,123,0.18)] bg-[rgba(255,255,255,0.03)] px-3 py-1.5 text-left text-[0.64rem] leading-4 text-[rgba(228,219,201,0.78)] transition-colors duration-300 hover:border-[rgba(206,180,123,0.34)] hover:text-[var(--color-cream)] md:px-3 md:py-2 md:text-[0.68rem] md:leading-5"
+                      className="w-[12.25rem] shrink-0 rounded-[0.95rem] border border-[rgba(206,180,123,0.18)] bg-[rgba(255,255,255,0.03)] px-3 py-2 text-left text-[0.64rem] leading-4 text-[rgba(228,219,201,0.78)] transition-colors duration-300 hover:border-[rgba(206,180,123,0.34)] hover:text-[var(--color-cream)] disabled:cursor-not-allowed disabled:opacity-50 md:px-3 md:py-2 md:text-[0.68rem] md:leading-5"
+                      disabled={isLoading}
                       key={prompt}
                       onClick={() => sendMessage(prompt)}
                       type="button"
@@ -369,10 +384,11 @@ export function SundaAiChat({ reducedMotion }) {
                   <label className="sr-only" htmlFor="sunda-ai-message">
                     Tulis pertanyaan tentang adat Sunda
                   </label>
-                  <div className="md:flex md:items-end md:gap-3">
+                  <div className="flex items-end gap-2 rounded-[1.15rem] border border-[rgba(255,255,255,0.09)] bg-[rgba(255,255,255,0.035)] p-2 transition-colors duration-300 focus-within:border-[rgba(206,180,123,0.32)] md:gap-3 md:rounded-[1.2rem]">
                     <textarea
-                      className="min-h-20 w-full resize-none rounded-[1.05rem] border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.035)] px-3.5 py-3 text-[0.84rem] leading-5 text-[var(--color-cream)] outline-none transition-colors duration-300 placeholder:text-[rgba(228,219,201,0.38)] focus:border-[rgba(206,180,123,0.32)] md:min-h-16 md:flex-1 md:rounded-[1rem] md:px-4 md:py-3 md:text-[0.94rem] md:leading-6"
+                      className="max-h-28 min-h-12 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[0.88rem] leading-5 text-[var(--color-cream)] outline-none placeholder:text-[rgba(228,219,201,0.38)] md:min-h-14 md:px-3 md:text-[0.94rem] md:leading-6"
                       data-lenis-prevent="true"
+                      data-lenis-prevent-touch="true"
                       disabled={isLoading}
                       id="sunda-ai-message"
                       onChange={(event) => setInputValue(event.target.value)}
@@ -381,14 +397,29 @@ export function SundaAiChat({ reducedMotion }) {
                       value={inputValue}
                     />
                     <button
-                      className="mt-2.5 inline-flex w-full items-center justify-center rounded-full border border-[rgba(206,180,123,0.28)] bg-[rgba(206,180,123,0.16)] px-5 py-3 text-[0.68rem] uppercase tracking-[0.24em] text-[var(--color-cream)] transition-all duration-300 hover:border-[rgba(206,180,123,0.4)] hover:bg-[rgba(206,180,123,0.22)] disabled:cursor-not-allowed disabled:opacity-60 md:mt-0 md:h-12 md:w-auto md:min-w-32 md:text-[0.7rem] md:tracking-[0.24em]"
+                      aria-label="Kirim pertanyaan"
+                      className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[rgba(206,180,123,0.28)] bg-[rgba(206,180,123,0.18)] text-[var(--color-cream)] transition-all duration-300 hover:border-[rgba(206,180,123,0.4)] hover:bg-[rgba(206,180,123,0.24)] focus-visible:ring-2 focus-visible:ring-[rgba(206,180,123,0.56)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#070a07] disabled:cursor-not-allowed disabled:opacity-50 md:w-auto md:min-w-32 md:gap-2 md:px-5 md:text-[0.7rem] md:uppercase md:tracking-[0.24em]"
                       disabled={isLoading || !inputValue.trim()}
                       type="submit"
                     >
-                      Kirim
+                      <span className="hidden md:inline">Kirim</span>
+                      <svg
+                        aria-hidden="true"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M5 12h13M13 6l6 6-6 6"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1.8"
+                        />
+                      </svg>
                     </button>
                   </div>
-                  <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                  <div className="hidden flex-col gap-2 md:flex md:flex-row md:items-center md:justify-between">
                     <div className="space-y-1 md:block">
                       <p className="text-[0.62rem] uppercase tracking-[0.16em] text-[rgba(228,219,201,0.45)] md:text-[0.66rem] md:tracking-[0.18em]">
                         Fokus pada adat dan budaya Sunda
@@ -399,7 +430,7 @@ export function SundaAiChat({ reducedMotion }) {
                     </div>
                   </div>
                 </form>
-              </div>
+              </footer>
             </MotionAside>
           </>
         )}
