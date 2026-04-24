@@ -29,10 +29,10 @@ export function Footer({ items, onNavigate }) {
             ))}
           </div>
           <p className="text-[0.68rem] uppercase tracking-[0.26em] text-[rgba(220,209,188,0.48)]">
-            Dibangun dengan React, Tailwind, Motion, GSAP, ScrollTrigger, dan Lenis
+            Built with React, Tailwind, Motion, GSAP, ScrollTrigger, and Lenis
           </p>
           <p className="text-[0.72rem] tracking-[0.08em] text-[rgba(220,209,188,0.62)]">
-            © 2026 Rafli A. Seluruh hak cipta dilindungi.
+            &copy; 2026 Rafli A. All rights reserved.
           </p>
         </div>
       </div>
